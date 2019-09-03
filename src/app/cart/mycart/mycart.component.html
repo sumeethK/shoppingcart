@@ -1,7 +1,7 @@
-<p *ngIf="!productList || productList.length ===0">
+<p *ngIf="!cart.productList || cart.productList.length ===0">
   Your Cart is empty!!!
 </p>
-<table *ngIf=" productList.length >0" class="table table-hover table-condensed" id="cart">
+<table *ngIf=" cart.productList.length >0" class="table table-hover table-condensed" id="cart">
   <thead>
   <tr>
     <th style="width:50%">Product</th>
@@ -12,7 +12,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let product of productList">
+  <tr *ngFor="let product of cart.productList">
     <td data-th="Product">
       <div class="row">
         <div class="col-sm-2 hidden-xs"><img alt="..." class="img-responsive" src="http://placehold.it/100x100"/></div>
@@ -40,18 +40,24 @@
     <td></td>
     <td>Total: </td>
     <td></td>
-    <td class="text-center"><strong>{{totalAmount| currency}}</strong></td>
+    <td class="text-center"><strong>{{cart.totalAmount| currency}}</strong></td>
   </tr>
   <tr class="visible-xs">
     <td></td>
     <td>Delivery charge:</td>
     <td></td>
-    <td class="text-center"><strong>{{deliveryAmount| currency}}</strong></td>
+    <td class="text-center"><strong>{{cart.deliveryAmount| currency}}</strong></td>
+  </tr>
+  <tr class="visible-xs">
+    <td></td>
+    <td>GST charge:</td>
+    <td></td>
+    <td class="text-center"><strong>{{cart.gst/100 | percent }}</strong></td>
   </tr>
   <tr>
     <td><a [routerLink]="['/products']" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
     <td class="hidden-xs" colspan="2">Payable Amount</td>
-    <td class="hidden-xs text-center"><strong>{{paybleAmount| currency}}</strong></td>
+    <td class="hidden-xs text-center"><strong>{{cart.paybleAmount| currency}}</strong></td>
     <td><a [routerLink]="['/checkout']" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
   </tr>
   </tfoot>

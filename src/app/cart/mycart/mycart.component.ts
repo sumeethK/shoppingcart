@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {Product} from '../../product/product';
 import {CartService} from '../cart-service';
 import {NotifierService} from 'angular-notifier';
+import {Cart} from './cart';
 
 @Component({
   selector: 'app-mycart',
@@ -9,17 +9,15 @@ import {NotifierService} from 'angular-notifier';
   styleUrls: ['./mycart.component.css']
 })
 export class MyCartComponent implements OnInit {
-
-  productList: Product[];
-  totalAmount: number;
-  paybleAmount: number;
-  deliveryAmount: number;
+  cart: Cart;
 
 
   constructor(private cartService: CartService, private notifier: NotifierService) {
-    this.productList = cartService.getCart();
-    this.deliveryAmount = this.productList.length > 0 ? 10 : 0;
-    this.recalculateAmounts();
+
+    this.cart = cartService.getCart();
+
+    this.cart.deliveryAmount = this.cart.productList.length > 0 ? 10 : 0;
+    this.cart = this.cartService.recalculateAmounts();
   }
 
   // addToCart(product) {
@@ -29,24 +27,20 @@ export class MyCartComponent implements OnInit {
   modifyQuantity(product, $event) {
     try {
       const quantity = parseInt($event.target.value);
-      this.productList = this.cartService.modifyQuantity(product, quantity);
+      this.cart = this.cartService.modifyQuantity(product, quantity);
     } catch (e) {
       console.log(e);
     }
-    this.recalculateAmounts();
+    this.cart = this.cartService.recalculateAmounts();
 
   }
 
   removeProduct(product) {
     this.notifier.notify('info', `${product.name} successfully removed from your cart.`);
-    this.productList = this.cartService.removeProduct(product);
-    this.recalculateAmounts();
+    this.cart = this.cartService.removeProduct(product);
+    this.cart = this.cartService.recalculateAmounts();
   }
 
-  recalculateAmounts() {
-    this.totalAmount = this.cartService.totalAmount();
-    this.paybleAmount = this.totalAmount + this.deliveryAmount;
-  }
 
   ngOnInit() {
   }

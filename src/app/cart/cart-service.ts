@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import {Cart} from './mycart/cart';
 import {Product} from '../product/product';
 
 @Injectable({
@@ -6,14 +7,16 @@ import {Product} from '../product/product';
 })
 export class CartService {
 
-  productList: Product[];
+  // productList: Product[];
+  cart: Cart;
 
   constructor() {
-    const storedProducts = localStorage.getItem('getProducts');
+    const storedProducts = localStorage.getItem('cart');
     if (storedProducts) {
-      this.productList = JSON.parse(storedProducts);
+      this.cart = JSON.parse(storedProducts);
     } else {
-      this.productList = new Array<Product>();
+      this.cart = new Cart();
+      this.cart.productList = new Array<Product>();
     }
   }
 
@@ -21,34 +24,37 @@ export class CartService {
     if (!this.checkIfProductExist(product)) {
       product.quantity = 1;
       product.subtotal = product.price * product.quantity;
-      this.productList.push(product);
-      localStorage.setItem('getProducts', JSON.stringify(this.productList));
+      this.cart.productList.push(product);
+      localStorage.setItem('cart', JSON.stringify(this.cart));
     }
-    return this.productList;
+    return this.cart;
   }
-  totalAmount() {
-      let total = 0;
-      this.productList.forEach(p => total += p.subtotal);
-      return total;
+
+  calcTotalAmount() {
+    let total = 0;
+    this.cart.productList.forEach(p => total += p.subtotal);
+    this.cart.totalAmount = total;
+    localStorage.setItem('cart', JSON.stringify(this.cart));
+    return this.cart;
   }
 
   modifyQuantity(product, quantity) {
     if (this.checkIfProductExist(product) && quantity > 0) {
       product.quantity = quantity;
       product.subtotal = product.price * product.quantity;
-      const index = this.productList.findIndex(p => p.id === product.id);
-      this.productList[index] = product;
-      localStorage.setItem('getProducts', JSON.stringify(this.productList));
+      const index = this.cart.productList.findIndex(p => p.id === product.id);
+      this.cart.productList[index] = product;
+      localStorage.setItem('cart', JSON.stringify(this.cart));
     }
-    return this.productList;
+    return this.cart;
   }
 
   getCart() {
-    return this.productList;
+    return this.cart;
   }
 
   checkIfProductExist(product) {
-    if (this.productList.findIndex(p => product.id === p.id) > -1) {
+    if (this.cart.productList.findIndex(p => product.id === p.id) > -1) {
       return true;
     } else {
       return false;
@@ -56,11 +62,18 @@ export class CartService {
   }
 
   removeProduct(product) {
-    const id = this.productList.findIndex(p => product.id === p.id);
+    const id = this.cart.productList.findIndex(p => product.id === p.id);
     if (id > -1) {
-      this.productList.splice(id, 1);
-      localStorage.setItem('getProducts', JSON.stringify(this.productList));
+      this.cart.productList.splice(id, 1);
+      localStorage.setItem('cart', JSON.stringify(this.cart));
     }
-    return this.productList;
+    return this.cart;
+  }
+
+  recalculateAmounts() {
+    this.calcTotalAmount();
+    this.cart.paybleAmount = ((100 + this.cart.gst) * this.cart.totalAmount) / 100 + this.cart.deliveryAmount;
+    localStorage.setItem('cart', JSON.stringify(this.cart));
+    return this.cart;
   }
 }

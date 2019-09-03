@@ -1,4 +1,6 @@
 import {Component, OnInit} from '@angular/core';
+import {CartService} from '../cart-service';
+import {Cart} from '../mycart/cart';
 
 @Component({
   selector: 'app-checkout',
@@ -7,9 +9,25 @@ import {Component, OnInit} from '@angular/core';
 })
 export class CheckoutComponent implements OnInit {
 
-  constructor() { }
+  private readonly cart: Cart;
+  private discount: number;
+  private redeem: string;
+
+  constructor(private cartService: CartService) {
+    this.cart = cartService.getCart();
+    this.discount = 0;
+  }
+
+  onRedeam() {
+    if (this.redeem === '100') {
+      this.discount = 100;
+    } else {
+      this.discount = 0;
+    }
+  }
 
   ngOnInit() {
   }
+
 
 }
