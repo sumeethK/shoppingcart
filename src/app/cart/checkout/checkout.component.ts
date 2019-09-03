@@ -9,9 +9,9 @@ import {Cart} from '../mycart/cart';
 })
 export class CheckoutComponent implements OnInit {
 
-  private readonly cart: Cart;
-  private discount: number;
-  private redeem: string;
+  readonly cart: Cart;
+  discount: number;
+  redeem: string;
 
   constructor(private cartService: CartService) {
     this.cart = cartService.getCart();
