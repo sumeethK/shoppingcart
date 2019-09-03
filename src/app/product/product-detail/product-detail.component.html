@@ -8,12 +8,12 @@
     <p *ngIf="product.price">
       Price: {{ product.price | currency }}
     </p>
-    <button (click)="addToCart(product)">
+    <button (click)="addToCart(product)" class="btn btn-success">
       Add to cart
     </button>
   </div>
   <div class="col-12 col-md-8">
-    <img src="https://picsum.photos/id/870/900/600"/>
+    <img class="img-fluid" src="https://picsum.photos/id/870/900/600"/>
   </div>
 </div>
 

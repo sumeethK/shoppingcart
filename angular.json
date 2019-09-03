@@ -37,7 +37,10 @@
               "node_modules/angular-notifier/styles/types/type-warning.css",
               "src/styles.sass"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/jquery.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
