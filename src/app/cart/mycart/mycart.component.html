@@ -1,0 +1,59 @@
+<p *ngIf="!productList || productList.length ===0">
+  Your Cart is empty!!!
+</p>
+<table *ngIf=" productList.length >0" class="table table-hover table-condensed" id="cart">
+  <thead>
+  <tr>
+    <th style="width:50%">Product</th>
+    <th style="width:10%">Price</th>
+    <th style="width:8%">Quantity</th>
+    <th class="text-center" style="width:22%">Subtotal</th>
+    <th style="width:10%"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let product of productList">
+    <td data-th="Product">
+      <div class="row">
+        <div class="col-sm-2 hidden-xs"><img alt="..." class="img-responsive" src="http://placehold.it/100x100"/></div>
+        <div class="col-sm-10">
+          <h4 class="nomargin">{{product.name}}</h4>
+          <p>{{product.description}}</p>
+        </div>
+      </div>
+    </td>
+    <td data-th="Price">{{product.price| currency}}</td>
+    <td data-th="Quantity">
+      <input (change)="modifyQuantity(product,$event)" class="form-control text-center" type="number"
+             value="{{product.quantity}}" >
+    </td>
+    <td class="text-center" data-th="Subtotal">{{product.subtotal| currency}}</td>
+    <td class="actions" data-th="">
+      <a (click)="removeProduct(product)" class="btn btn-danger">Remove</a>
+      <!--      <button class="btn btn-info btn-sm"><i class="fa fa-refresh"></i></button>-->
+      <!--      <button class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>-->
+    </td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <tr class="visible-xs">
+    <td></td>
+    <td>Total: </td>
+    <td></td>
+    <td class="text-center"><strong>{{totalAmount| currency}}</strong></td>
+  </tr>
+  <tr class="visible-xs">
+    <td></td>
+    <td>Delivery charge:</td>
+    <td></td>
+    <td class="text-center"><strong>{{deliveryAmount| currency}}</strong></td>
+  </tr>
+  <tr>
+    <td><a [routerLink]="['/products']" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+    <td class="hidden-xs" colspan="2">Payable Amount</td>
+    <td class="hidden-xs text-center"><strong>{{paybleAmount| currency}}</strong></td>
+    <td><a [routerLink]="['/checkout']" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
+  </tr>
+  </tfoot>
+</table>
+
